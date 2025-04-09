@@ -51,6 +51,39 @@ Geth（Go-Ethereum）是以太坊的核心参考实现之一，由Go语言开发
 
 
 ### 1. 分层架构图（PlantUML实现）
+```mermaid
+graph TD
+    A[P2P网络层] -->|传输区块/交易| B[区块链协议层]
+    B -->|验证交易/区块| C[状态存储层]
+    B -->|触发合约执行| D[EVM执行层]
+    D -->|写入合约数据| C
+
+    subgraph P2P网络层
+        Kademlia节点发现
+        P2P连接管理
+        消息编码(RLP)
+    end
+
+    subgraph 区块链协议层
+        eth协议(eth/63)
+        les轻节点协议
+        区块验证
+        交易池
+    end
+
+    subgraph 状态存储层
+        MPT树(trie包)
+        LevelDB数据库(ethdb)
+        状态快照
+    end
+
+    subgraph EVM执行层
+        EVM虚拟机(vm包)
+        预编译合约(precompiles)
+        Gas计量器
+    end
+```
+
 ```plantuml
 @startuml
 ' 定义分层
